@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Quiz App</title>
+  <link rel="stylesheet" href="main.css">
 </head>
 
 <body>
@@ -18,7 +19,7 @@
     </div>
     <div class="answer-are">
       <div class="answer">
-        <input type="radio" name="questions" id="answer_1">
+        <input type="radio" name="questions" id="answer_1" checked>
         <label for="answer_1">To Make Text Bold</label>
       </div>
       <div class="answer">
@@ -37,7 +38,7 @@
     <button class="submit-answer">Submit Answer</button>
     <div class="bullets">
       <div class="spans">
-        <span></span>
+        <span class="on"></span>
         <span></span>
         <span></span>
         <span></span>
@@ -52,7 +53,9 @@
         <span class="seconds">45</span>
       </div>
     </div>
-    <div class="results"></div>
+    <div class="results">
+      <span class="perfect">Perfect</span> You Answered 10 From 10
+    </div>
   </div>
 </body>
 
