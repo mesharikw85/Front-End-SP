@@ -3,9 +3,12 @@ let countSpan = document.querySelector(".count span");
 let bulletsSpanContainer = document.querySelector(".bullets .spans");
 let quizArea = document.querySelector(".quiz-area");
 let answerArea = document.querySelector(".answer-are");
+let submitBtn = document.querySelector(".submit-answer");
 
 // Set Option
 let currentIndex = 0;
+let rightAnswer = 0;
+
 function getQuestions() {
   let myRequest = new XMLHttpRequest();
 
@@ -13,19 +16,31 @@ function getQuestions() {
     if (this.readyState === 4 && this.status === 200) {
       let questionsObj = JSON.parse(this.responseText);
       let qCount = questionsObj.length;
-      console.log(qCount);
+      // console.log(qCount);
       // Create Bullets + Set Questions Count
       createBullets(qCount);
 
       // Add Question Data
       addQuestionData(questionsObj[currentIndex], qCount);
+
+      // click on Submit
+      submitBtn.onclick = () => {
+        // Get right answer
+        let theRightAnswer = questionsObj[currentIndex].right_answer;
+        console.log(theRightAnswer);
+
+        // Increase Index
+        currentIndex++;
+        // check the answer
+        checkAnswer(theRightAnswer, qCount);
+      };
     }
   };
 
   myRequest.open("Get", "html_questions.json", true);
   myRequest.send();
 }
-
+// check answers function
 getQuestions();
 
 function createBullets(num) {
@@ -45,8 +60,8 @@ function createBullets(num) {
 }
 
 function addQuestionData(obj, count) {
-  console.log(obj);
-  console.log(count);
+  // console.log(obj);
+  // console.log(count);
   // Create H2 Question
   let questionTitle = document.createElement("h2");
   // Create Question Text
@@ -71,7 +86,7 @@ function addQuestionData(obj, count) {
     radioInput.dataset.answer = obj[`answer_${i}`];
     // Make First Option Selected
     if (i === 1) {
-      radioInput.checked = true;
+      radioInput.checked = true;   
     }
     // Create Label
     let theLable = document.createElement("label");
@@ -88,3 +103,22 @@ function addQuestionData(obj, count) {
     answerArea.append(mainDiv);
   }
 }
+
+function checkAnswer(rAnswer, count) {
+  let answers = document.getElementsByName("question");
+  let theChoosenAnswer;
+
+  for (i = 0; i < answers.length; i++) {
+    if (answers[i].checked) {
+      theChoosenAnswer = answers[i].dataset.answer;
+    }
+  }
+
+  console.log(`Right Answer is: ${rAnswer}`);
+  console.log(`Chossen Answer is: ${theChoosenAnswer}`);
+
+  if (rAnswer === theChoosenAnswer) {
+    rightAnswer++;
+    console.log("Good Answer");
+  }
+} 
