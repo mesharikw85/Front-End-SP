@@ -9,6 +9,7 @@ let submitBtn = document.querySelector(".submit-answer");
 let currentIndex = 0;
 let rightAnswer = 0;
 
+// Get Next Questions
 function getQuestions() {
   let myRequest = new XMLHttpRequest();
 
@@ -27,12 +28,22 @@ function getQuestions() {
       submitBtn.onclick = () => {
         // Get right answer
         let theRightAnswer = questionsObj[currentIndex].right_answer;
-        console.log(theRightAnswer);
+        // console.log(theRightAnswer);
 
         // Increase Index
         currentIndex++;
         // check the answer
         checkAnswer(theRightAnswer, qCount);
+
+        // Remove Pervous Question
+        quizArea.innerHTML = "";
+        answerArea.innerHTML = "";
+
+        // Add qusetion Data
+        addQuestionData(questionsObj[currentIndex], qCount);
+
+        // Handle bullets classes
+        handleBullets();
       };
     }
   };
@@ -40,7 +51,7 @@ function getQuestions() {
   myRequest.open("Get", "html_questions.json", true);
   myRequest.send();
 }
-// check answers function
+
 getQuestions();
 
 function createBullets(num) {
@@ -86,7 +97,7 @@ function addQuestionData(obj, count) {
     radioInput.dataset.answer = obj[`answer_${i}`];
     // Make First Option Selected
     if (i === 1) {
-      radioInput.checked = true;   
+      radioInput.checked = true;
     }
     // Create Label
     let theLable = document.createElement("label");
@@ -114,11 +125,21 @@ function checkAnswer(rAnswer, count) {
     }
   }
 
-  console.log(`Right Answer is: ${rAnswer}`);
-  console.log(`Chossen Answer is: ${theChoosenAnswer}`);
+  // console.log(`Right Answer is: ${rAnswer}`);
+  // console.log(`Chossen Answer is: ${theChoosenAnswer}`);
 
   if (rAnswer === theChoosenAnswer) {
     rightAnswer++;
     console.log("Good Answer");
   }
-} 
+}
+
+function handleBullets() {
+  let bulletsSpans = document.querySelectorAll(".bullets .spans span");
+  let arryOfSpan = Array.from(bulletsSpans);
+  arryOfSpan.forEach((span, index) => {
+    if (currentIndex === index) {
+      span.className = "on";
+    }
+  }); 
+}
