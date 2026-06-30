@@ -6,10 +6,12 @@ let quizArea = document.querySelector(".quiz-area");
 let answerArea = document.querySelector(".answer-are");
 let submitBtn = document.querySelector(".submit-answer");
 let resultBox = document.querySelector(".results");
+let countdownElement = document.querySelector(".countdown");
 
 // Set Option
 let currentIndex = 0;
 let rightAnswer = 0;
+let countdownInterval;
 
 function getQuestions() {
   let myRequest = new XMLHttpRequest();
@@ -24,6 +26,9 @@ function getQuestions() {
 
       // Add Question Data
       addQuestionData(questionsObj[currentIndex], qCount);
+
+      // Start Count
+      countdown(3, qCount);
 
       // click on Submit
       submitBtn.onclick = () => {
@@ -45,6 +50,10 @@ function getQuestions() {
 
         // Handle bullets classes
         handleBullets();
+
+        // Start Count
+        clearInterval(countdownInterval);
+        countdown(3, qCount);
 
         // Show Results
         showResults(qCount);
@@ -150,7 +159,6 @@ function handleBullets() {
   });
 }
 
-// 
 function showResults(count) {
   let theResults;
   if (currentIndex === count) {
@@ -160,16 +168,38 @@ function showResults(count) {
     bulltes.remove();
 
     if (rightAnswer > count / 2 && rightAnswer < count) {
-      theResults = `<span class="good">Good<span>, ${rightAnswer} from ${count} is Good`;
+      theResults = `<span class="good">Good</span>, ${rightAnswer} from ${count} is Good`;
     } else if (rightAnswer === count) {
-      theResults = `<span class="perfect">Perfect<span>, ${rightAnswer} from ${count} is Excellent`;
+      theResults = `<span class="perfect">Perfect</span>, ${rightAnswer} from ${count} is Excellent`;
     } else {
-      theResults = `<span class="bad">bad<span>, ${rightAnswer} from ${count} Try Hard`;
+      theResults = `<span class="bad">bad</span>, ${rightAnswer} from ${count} Try Hard`;
     }
 
     resultBox.innerHTML = theResults;
     resultBox.style.padding = "10px";
     resultBox.style.backgroundColor = "white";
     resultBox.style.marginTop = "10px";
+  }
+}
+
+// Countdown Function
+function countdown(dutarion, count) {
+  if (currentIndex < count) {
+    let minutes, second;
+    countdownInterval = setInterval(() => {
+      minutes = parseInt(dutarion / 60);
+      second = parseInt(dutarion % 60);
+
+      minutes = minutes < 10 ? `0${minutes}` : minutes;
+      second = minutes < 10 ? `0${second}` : second;
+
+      countdownElement.innerHTML = `${minutes}:${second}`;
+
+      if (--dutarion < 0) {
+        clearInterval(countdownInterval);
+        console.log("Finish");
+        submitBtn.click();
+      }
+    }, 1000);
   }
 }
