@@ -1,15 +1,16 @@
 // Select Elemnts
 let countSpan = document.querySelector(".count span");
+let bulltes = document.querySelector(".bullets");
 let bulletsSpanContainer = document.querySelector(".bullets .spans");
 let quizArea = document.querySelector(".quiz-area");
 let answerArea = document.querySelector(".answer-are");
 let submitBtn = document.querySelector(".submit-answer");
+let resultBox = document.querySelector(".results");
 
 // Set Option
 let currentIndex = 0;
 let rightAnswer = 0;
 
-// Get Next Questions
 function getQuestions() {
   let myRequest = new XMLHttpRequest();
 
@@ -44,6 +45,9 @@ function getQuestions() {
 
         // Handle bullets classes
         handleBullets();
+
+        // Show Results
+        showResults(qCount);
       };
     }
   };
@@ -71,47 +75,49 @@ function createBullets(num) {
 }
 
 function addQuestionData(obj, count) {
-  // console.log(obj);
-  // console.log(count);
-  // Create H2 Question
-  let questionTitle = document.createElement("h2");
-  // Create Question Text
-  // let questionText = document.createTextNode(obj.title);
-  let questionText = document.createTextNode(obj["title"]);
-  // Append Text To H2
-  questionTitle.append(questionText);
-  // Append H2 To Quiz Area
-  quizArea.append(questionText);
-  // Create The Answer
-  for (let i = 1; i <= 4; i++) {
-    //create Main Answer Div
-    let mainDiv = document.createElement("div");
-    // Add Class To Main Div
-    mainDiv.className = "answer";
-    // Create Radio Input
-    let radioInput = document.createElement("input");
-    // Add Type + Name + Id + Data-Atrribute
-    radioInput.name = "question";
-    radioInput.type = "radio";
-    radioInput.id = `answer_${i}`;
-    radioInput.dataset.answer = obj[`answer_${i}`];
-    // Make First Option Selected
-    if (i === 1) {
-      radioInput.checked = true;
+  if (currentIndex < count) {
+    // console.log(obj);
+    // console.log(count);
+    // Create H2 Question
+    let questionTitle = document.createElement("h2");
+    // Create Question Text
+    // let questionText = document.createTextNode(obj.title);
+    let questionText = document.createTextNode(obj["title"]);
+    // Append Text To H2
+    questionTitle.append(questionText);
+    // Append H2 To Quiz Area
+    quizArea.append(questionText);
+    // Create The Answer
+    for (let i = 1; i <= 4; i++) {
+      //create Main Answer Div
+      let mainDiv = document.createElement("div");
+      // Add Class To Main Div
+      mainDiv.className = "answer";
+      // Create Radio Input
+      let radioInput = document.createElement("input");
+      // Add Type + Name + Id + Data-Atrribute
+      radioInput.name = "question";
+      radioInput.type = "radio";
+      radioInput.id = `answer_${i}`;
+      radioInput.dataset.answer = obj[`answer_${i}`];
+      // Make First Option Selected
+      if (i === 1) {
+        radioInput.checked = true;
+      }
+      // Create Label
+      let theLable = document.createElement("label");
+      // Add For Attribute
+      theLable.htmlFor = `answer_${i}`;
+      // Create Lable Text
+      let theLabelText = document.createTextNode(obj[`answer_${i}`]);
+      // Add Text To Label
+      theLable.append(theLabelText);
+      // Add Input + Label To Main Div
+      mainDiv.append(radioInput);
+      mainDiv.append(theLable);
+      // Append All Divs To Answer Area
+      answerArea.append(mainDiv);
     }
-    // Create Label
-    let theLable = document.createElement("label");
-    // Add For Attribute
-    theLable.htmlFor = `answer_${i}`;
-    // Create Lable Text
-    let theLabelText = document.createTextNode(obj[`answer_${i}`]);
-    // Add Text To Label
-    theLable.append(theLabelText);
-    // Add Input + Label To Main Div
-    mainDiv.append(radioInput);
-    mainDiv.append(theLable);
-    // Append All Divs To Answer Area
-    answerArea.append(mainDiv);
   }
 }
 
@@ -141,5 +147,29 @@ function handleBullets() {
     if (currentIndex === index) {
       span.className = "on";
     }
-  }); 
+  });
+}
+
+// 
+function showResults(count) {
+  let theResults;
+  if (currentIndex === count) {
+    quizArea.remove();
+    answerArea.remove();
+    submitBtn.remove();
+    bulltes.remove();
+
+    if (rightAnswer > count / 2 && rightAnswer < count) {
+      theResults = `<span class="good">Good<span>, ${rightAnswer} from ${count} is Good`;
+    } else if (rightAnswer === count) {
+      theResults = `<span class="perfect">Perfect<span>, ${rightAnswer} from ${count} is Excellent`;
+    } else {
+      theResults = `<span class="bad">bad<span>, ${rightAnswer} from ${count} Try Hard`;
+    }
+
+    resultBox.innerHTML = theResults;
+    resultBox.style.padding = "10px";
+    resultBox.style.backgroundColor = "white";
+    resultBox.style.marginTop = "10px";
+  }
 }
