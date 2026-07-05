@@ -5,12 +5,29 @@ document.querySelector("h1").innerHTML = gameName;
 document.querySelector("footer").innerHTML =
   `${gameName} Game Created By Meshari`;
 
-// Part3 Manage Navigations
+// Part4 Game Logic
 
 // Setting Game Options
 let numberOfTries = 6;
 let numberOfLetters = 6;
-let currebtTry = 1;
+let currentTry = 1;
+
+// Manage Word
+let wordToGuess = "";
+const words = [
+  "Create",
+  "Update",
+  "Delete",
+  "Master",
+  "Branch",
+  "Mainly",
+  "Elzero",
+  "School",
+];
+
+wordToGuess = words[Math.floor(Math.random() * words.length)].toLowerCase();
+
+// console.log(wordToGuess);
 
 function generateInput() {
   const inputsContainer = document.querySelector(".inputs");
@@ -65,6 +82,33 @@ function generateInput() {
       }
     });
   });
+}
+
+const guesBtn = document.querySelector(".check");
+guesBtn.addEventListener("click", handleGuesses);
+console.log(wordToGuess);
+function handleGuesses() {
+  let successGuess = true;
+  console.log(wordToGuess);
+  for (let i = 1; i < numberOfLetters; i++) {
+    const inputField = document.querySelector(
+      `#guess-${currentTry}-letter-${i}`,
+    );
+    const letter = inputField.value.toLowerCase();
+    // console.log(letter);
+    const acuallLetter = wordToGuess[i - 1];
+    // console.log(acuallLetter);
+    // Game Logic
+    if (letter === acuallLetter) {
+      inputField.classList.add("yes-in-place");
+    } else if (wordToGuess.includes(letter) && letter != "") {
+      inputField.classList.add("not-in-place");
+      successGuess = false;
+    } else {
+      inputField.classList.add("no");
+      successGuess = false;
+    }
+  }
 }
 
 window.onload = function () {
