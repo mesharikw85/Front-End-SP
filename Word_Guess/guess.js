@@ -5,7 +5,7 @@ document.querySelector("h1").innerHTML = gameName;
 document.querySelector("footer").innerHTML =
   `${gameName} Game Created By Meshari`;
 
-// Part4 Game Logic
+// Part 5 Manage Win
 
 // Setting Game Options
 let numberOfTries = 6;
@@ -24,6 +24,7 @@ const words = [
   "Elzero",
   "School",
 ];
+let messageArea = document.querySelector(".message");
 
 wordToGuess = words[Math.floor(Math.random() * words.length)].toLowerCase();
 
@@ -86,11 +87,13 @@ function generateInput() {
 
 const guesBtn = document.querySelector(".check");
 guesBtn.addEventListener("click", handleGuesses);
+
 console.log(wordToGuess);
+
 function handleGuesses() {
   let successGuess = true;
   console.log(wordToGuess);
-  for (let i = 1; i < numberOfLetters; i++) {
+  for (let i = 1; i <= numberOfLetters; i++) {
     const inputField = document.querySelector(
       `#guess-${currentTry}-letter-${i}`,
     );
@@ -108,6 +111,18 @@ function handleGuesses() {
       inputField.classList.add("no");
       successGuess = false;
     }
+  }
+
+  if (successGuess) {
+    messageArea.innerHTML = `You Win The Word is <span>${wordToGuess}</span>`;
+
+    let allTries = document.querySelectorAll(".inputs > div");
+
+    allTries.forEach((tryDiv) => tryDiv.classList.add("disabled-inputs"));
+
+    guesBtn.disabled = true;
+  } else {
+    console.log("You Loos");
   }
 }
 
