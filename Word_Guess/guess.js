@@ -5,7 +5,7 @@ document.querySelector("h1").innerHTML = gameName;
 document.querySelector("footer").innerHTML =
   `${gameName} Game Created By Meshari`;
 
-// Part 5 Manage Win
+// Part 5 Manage Lose
 
 // Setting Game Options
 let numberOfTries = 6;
@@ -122,7 +122,31 @@ function handleGuesses() {
 
     guesBtn.disabled = true;
   } else {
-    console.log("You Loos");
+    document
+      .querySelector(`.try-${currentTry}`)
+      .classList.add("disabled-inputs");
+
+    const currentTryInputs = document.querySelectorAll(
+      `.try-${currentTry} input`,
+    );
+    currentTryInputs.forEach((input) => (input.disabled = true));
+
+    currentTry++;
+
+    const nextTryInputs = document.querySelectorAll(`.try-${currentTry} input`);
+    nextTryInputs.forEach((input) => (input.disabled = false));
+
+    const el = document.querySelector(`.try-${currentTry}`);
+
+    if (el) {
+      document
+        .querySelector(`.try-${currentTry}`)
+        .classList.remove("disabled-inputs");
+      el.children[1].focus();
+    } else {
+      guesBtn.disabled = true;
+      messageArea.innerHTML = `You Lose The Word is <span>${wordToGuess}</span>`;
+    }
   }
 }
 
