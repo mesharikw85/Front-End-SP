@@ -5,12 +5,13 @@ document.querySelector("h1").innerHTML = gameName;
 document.querySelector("footer").innerHTML =
   `${gameName} Game Created By Meshari`;
 
-// Part 5 Manage Lose
+// Part 5 Manage Hints
 
 // Setting Game Options
 let numberOfTries = 6;
 let numberOfLetters = 6;
 let currentTry = 1;
+let numberOfHints = 2;
 
 // Manage Word
 let wordToGuess = "";
@@ -24,15 +25,19 @@ const words = [
   "Elzero",
   "School",
 ];
+wordToGuess = words[Math.floor(Math.random() * words.length)].toLowerCase();
 let messageArea = document.querySelector(".message");
 
-wordToGuess = words[Math.floor(Math.random() * words.length)].toLowerCase();
+// Manage Hints
+document.querySelector(".hint span").innerHTML = numberOfHints;
+const getHintButten = document.querySelector(".hint");
+getHintButten.addEventListener("click", getHint);
 
 // console.log(wordToGuess);
 
 function generateInput() {
   const inputsContainer = document.querySelector(".inputs");
-
+  // Create Main Try Div
   for (let i = 1; i <= numberOfTries; i++) {
     const tryDiv = document.createElement("div");
     tryDiv.classList.add(`try-${i}`);
@@ -146,6 +151,33 @@ function handleGuesses() {
     } else {
       guesBtn.disabled = true;
       messageArea.innerHTML = `You Lose The Word is <span>${wordToGuess}</span>`;
+    }
+  }
+}
+
+function getHint() {
+  if (numberOfHints > 0) {
+    numberOfHints--;
+    document.querySelector(".hint span").innerHTML = numberOfHints;
+  }
+  if (numberOfHints === 0) getHintButten.disabled = true;
+
+  const enabledInputs = document.querySelectorAll("input:not([disabled])");
+
+  // console.log(enabledInputs);
+  const emptyEnabledInputs = Array.from(enabledInputs).filter(
+    (input) => input.value === "",
+  );
+  // console.log(emptyEnabledInputs);
+  if (emptyEnabledInputs.length > 0) {
+    const randomIndex = Math.floor(Math.random() * emptyEnabledInputs.length);
+    const randomInput = emptyEnabledInputs[randomIndex];
+    const indexToFill = Array.from(enabledInputs).indexOf(randomInput);
+    // console.log(randomIndex);
+    // console.log(randomInput);
+    // console.log(indexToFill);
+    if (indexToFill !== -1) {
+      randomInput.value = wordToGuess[indexToFill].toUpperCase();
     }
   }
 }
