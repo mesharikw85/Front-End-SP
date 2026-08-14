@@ -5,7 +5,7 @@ document.querySelector("h1").innerHTML = gameName;
 document.querySelector("footer").innerHTML =
   `${gameName} Game Created By Meshari`;
 
-// Part 5 Manage Hints
+// Part 5 Handle Backspace
 
 // Setting Game Options
 let numberOfTries = 6;
@@ -119,13 +119,23 @@ function handleGuesses() {
   }
 
   if (successGuess) {
-    messageArea.innerHTML = `You Win The Word is <span>${wordToGuess}</span>`;
+    // messageArea.innerHTML = `You Win The Word is <span>${wordToGuess}</span>`;
+    if (numberOfHints === 2) {
+      messageArea.innerHTML = `<p>Congratz You Didn't Use Hints</p>
+     You Win, The Word Is
+     <span>${wordToGuess}</span>`;
+    } else {
+      messageArea.innerHTML = `You Win, The Word Is
+     <span>${wordToGuess}</span>`;
+    }
 
     let allTries = document.querySelectorAll(".inputs > div");
 
     allTries.forEach((tryDiv) => tryDiv.classList.add("disabled-inputs"));
 
+    // Disable Guess Butten
     guesBtn.disabled = true;
+    getHintButten.disabled = true;
   } else {
     document
       .querySelector(`.try-${currentTry}`)
@@ -150,6 +160,7 @@ function handleGuesses() {
       el.children[1].focus();
     } else {
       guesBtn.disabled = true;
+      getHintButten.disabled = true;
       messageArea.innerHTML = `You Lose The Word is <span>${wordToGuess}</span>`;
     }
   }
@@ -182,6 +193,22 @@ function getHint() {
   }
 }
 
+function handleBackspace(event) {
+  if (event.key === "Escape") {
+    const inputs = document.querySelectorAll("input:not([disabled])");
+    const currentIndex = Array.from(inputs).indexOf(document.activeElement);
+    // console.log(currentIndex);
+    if (currentIndex > 0) {
+      const currentInput = inputs[currentIndex];
+      const prevInput = inputs[currentIndex - 1];
+      currentInput.value = "";
+      prevInput.value = "";
+      prevInput.focus();
+    }
+  }
+}
+
+document.addEventListener("keydown", handleBackspace);
 window.onload = function () {
   generateInput();
 };
