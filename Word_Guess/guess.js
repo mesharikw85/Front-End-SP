@@ -2,8 +2,7 @@
 let gameName = "Guess The Word";
 document.title = gameName;
 document.querySelector("h1").innerHTML = gameName;
-document.querySelector("footer").innerHTML =
-  `${gameName} Game Created By Meshari`;
+document.querySelector("footer").innerHTML = `${gameName} Game Created By Meshari`;
 
 // Part 5 Handle Backspace
 
@@ -15,16 +14,7 @@ let numberOfHints = 2;
 
 // Manage Word
 let wordToGuess = "";
-const words = [
-  "Create",
-  "Update",
-  "Delete",
-  "Master",
-  "Branch",
-  "Mainly",
-  "Elzero",
-  "School",
-];
+const words = ["Create", "Update", "Delete", "Master", "Branch", "Mainly", "Elzero", "School"];
 wordToGuess = words[Math.floor(Math.random() * words.length)].toLowerCase();
 let messageArea = document.querySelector(".message");
 
@@ -59,9 +49,7 @@ function generateInput() {
   inputsContainer.children[0].children[1].focus();
 
   // Disable All Inputs Except First One
-  const inputsInDisabledDiv = document.querySelectorAll(
-    ".disabled-inputs input",
-  );
+  const inputsInDisabledDiv = document.querySelectorAll(".disabled-inputs input");
   inputsInDisabledDiv.forEach((input) => (input.disabled = true));
 
   const inputs = document.querySelectorAll("input");
@@ -99,9 +87,7 @@ function handleGuesses() {
   let successGuess = true;
   console.log(wordToGuess);
   for (let i = 1; i <= numberOfLetters; i++) {
-    const inputField = document.querySelector(
-      `#guess-${currentTry}-letter-${i}`,
-    );
+    const inputField = document.querySelector(`#guess-${currentTry}-letter-${i}`);
     const letter = inputField.value.toLowerCase();
     // console.log(letter);
     const acuallLetter = wordToGuess[i - 1];
@@ -137,13 +123,9 @@ function handleGuesses() {
     guesBtn.disabled = true;
     getHintButten.disabled = true;
   } else {
-    document
-      .querySelector(`.try-${currentTry}`)
-      .classList.add("disabled-inputs");
+    document.querySelector(`.try-${currentTry}`).classList.add("disabled-inputs");
 
-    const currentTryInputs = document.querySelectorAll(
-      `.try-${currentTry} input`,
-    );
+    const currentTryInputs = document.querySelectorAll(`.try-${currentTry} input`);
     currentTryInputs.forEach((input) => (input.disabled = true));
 
     currentTry++;
@@ -154,9 +136,7 @@ function handleGuesses() {
     const el = document.querySelector(`.try-${currentTry}`);
 
     if (el) {
-      document
-        .querySelector(`.try-${currentTry}`)
-        .classList.remove("disabled-inputs");
+      document.querySelector(`.try-${currentTry}`).classList.remove("disabled-inputs");
       el.children[1].focus();
     } else {
       guesBtn.disabled = true;
@@ -176,9 +156,7 @@ function getHint() {
   const enabledInputs = document.querySelectorAll("input:not([disabled])");
 
   // console.log(enabledInputs);
-  const emptyEnabledInputs = Array.from(enabledInputs).filter(
-    (input) => input.value === "",
-  );
+  const emptyEnabledInputs = Array.from(enabledInputs).filter((input) => input.value === "");
   // console.log(emptyEnabledInputs);
   if (emptyEnabledInputs.length > 0) {
     const randomIndex = Math.floor(Math.random() * emptyEnabledInputs.length);
